@@ -80,6 +80,12 @@ describe World do
           expect(world.dead_cells.count).to eq 9
         end
       end
+      context 'when a cell is alive' do
+        before { world.board[1][1].alive = true }
+        it 'returns one' do
+          expect(world.dead_cells.count).to eq 8
+        end
+      end
     end    
   end
 end

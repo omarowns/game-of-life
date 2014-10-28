@@ -21,6 +21,9 @@ class World
   end
 
   def dead_cells
+    dead_cells = []
+    @cells.each { |cell| dead_cells << cell if cell.dead? }
+    dead_cells
   end
 end
 
