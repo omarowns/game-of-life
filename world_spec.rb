@@ -2,7 +2,7 @@ require 'rspec'
 require_relative 'game.rb'
 
 describe World do
-  
+
   subject(:world) { World.new }
 
   it { should respond_to(:cols) }
@@ -86,6 +86,79 @@ describe World do
           expect(world.dead_cells.count).to eq 8
         end
       end
+    end
+  end
+
+  describe 'looking for other cells' do
+    context 'when in the up left part of the default board' do
+      let(:cell_one) { world.board[0][0] }
+
+      it 'detects a live cell right' do
+        world.board[cell_one.y][cell_one.x + 1].alive = true
+        expect(world.live_cells_around_cell(cell_one).count).to eq 1
+      end
+      it 'detects a live cell down' do
+        world.board[cell_one.y + 1][cell_one.x].alive = true
+        expect(world.live_cells_around_cell(cell_one).count).to eq 1
+      end
+      it 'detects a live cell down right' do
+        world.board[cell_one.y + 1][cell_one.x + 1].alive = true
+        expect(world.live_cells_around_cell(cell_one).count).to eq 1
+      end
+
+      it 'may not even detect a live cell' do
+        expect(world.live_cells_around_cell(cell_one).count).to eq 0
+      end
+    end
+
+    context 'when in the middle cell of the default board' do
+      let(:cell) { world.board[1][1] }
+
+      it 'detects a live cell up left' do
+        world.board[cell.y - 1][cell.x - 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell up' do
+        world.board[cell.y - 1][cell.x].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell up right' do
+        world.board[cell.y - 1][cell.x + 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell left' do
+        world.board[cell.y][cell.x - 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell right' do
+        world.board[cell.y][cell.x + 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell down left' do
+        world.board[cell.y + 1][cell.x - 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell down' do
+        world.board[cell.y + 1][cell.x].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+      it 'detects a live cell down right' do
+        world.board[cell.y + 1][cell.x + 1].alive = true
+        expect(world.live_cells_around_cell(cell).count).to eq 1
+      end
+
+      it 'may not even detect a live cell' do
+        expect(world.live_cells_around_cell(cell).count).to eq 0
+      end
     end    
+  end
+
+  describe 'populating the world' do
+    describe 'randomly' do
+      before { world.populate! }
+      it 'does not returns an empty array with live cells' do
+        expect(world.live_cells.count).to_not eq []
+      end
+    end
   end
 end
