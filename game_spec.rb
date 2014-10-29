@@ -7,6 +7,7 @@ describe Game do
 
   it { should respond_to(:world) }
   it { should respond_to(:generation) }
+  it { should respond_to(:total_generations) }
 
   describe 'initialization' do
     let(:world){ World.new }
@@ -57,5 +58,12 @@ describe Game do
     end
   end
 
+  context 'with a valid scenario' do
+    let(:world) { World.new(5,5) }
+    let(:seed) { [[0,1],[1,0],[1,1],[2,2]] }
+    let(:game) { Game.new(world, seed) }
+
+    describe 'can assign generations'
+  end
 
 end

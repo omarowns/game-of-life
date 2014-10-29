@@ -1,12 +1,14 @@
 class Game
-  attr_accessor :world, :generation
+  attr_accessor :world, :generation, :total_generations
 
   # the seeds is a matrix that indicates which cells
   # are alive in the board  
   def initialize(world=World.new, seeds=[])
     @world = world
     @seeds = seeds
-
+    @total_generations = 1
+    @generation = 0
+    
     @seeds.each do |row|
       @world.board[row[0]][row[1]].alive = true
     end
