@@ -95,38 +95,20 @@ class World
   def live_cells_around_cell(cell)
     live_cells = []
     # Up Left
-    if cell.y > 0 and cell.x > 0
-      live_cells << @board[cell.y - 1][cell.x - 1] if @board[cell.y - 1][cell.x - 1].alive?
+    (-1..1).each do |ry|
+      (-1..1).each do |rx|
+        begin
+          y = cell.y + ry
+          x = cell.x + rx
+          if (ry==0 && rx==0) || (y < 0 || x < 0) || (y > @rows || x > @rows)
+            next
+          end
+          live_cells << @board[y][x] if @board[y][x].alive?
+        rescue
+          next
+        end        
+      end
     end
-    # Up
-    if cell.y > 0
-      live_cells << @board[cell.y - 1][cell.x] if @board[cell.y - 1][cell.x].alive?
-    end
-    # Up Right
-    if cell.y > 0 and cell.x < (cols - 1)
-      live_cells << @board[cell.y - 1][cell.x + 1] if @board[cell.y - 1][cell.x + 1].alive?
-    end
-    # Left
-    if cell.x > 0
-      live_cells << @board[cell.y][cell.x - 1] if @board[cell.y][cell.x - 1].alive?
-    end
-    # Right
-    if cell.x < (cols - 1)
-      live_cells << @board[cell.y][cell.x + 1] if @board[cell.y][cell.x + 1].alive?
-    end
-    # Down Left
-    if cell.y < (rows - 1) and cell.x > 0
-      live_cells << @board[cell.y + 1][cell.x - 1] if @board[cell.y + 1][cell.x - 1].alive?
-    end
-    # Down
-    if cell.y < (rows - 1)
-      live_cells << @board[cell.y + 1][cell.x] if @board[cell.y + 1][cell.x].alive?
-    end
-    # Down Right
-    if cell.y < (rows - 1) and cell.x < (rows - 1)
-      live_cells << @board[cell.y + 1][cell.x + 1] if @board[cell.y + 1][cell.x + 1].alive?
-    end
-
 
     live_cells
   end
