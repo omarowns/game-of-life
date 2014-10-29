@@ -7,6 +7,7 @@ describe Game do
 
   it { should respond_to(:world) }
   it { should respond_to(:generation) }
+  it { should respond_to(:total_generations) }
 
   describe 'initialization' do
     let(:world){ World.new }
@@ -57,5 +58,30 @@ describe Game do
     end
   end
 
+  context 'with a valid scenario' do
+    let(:world) { World.new }
+    let(:seed) { [[0,1],[1,0],[1,1],[2,2]] }
+    let(:game) { Game.new(world, seed) }
+
+    it 'can assign generations' do
+      expect(game.total_generations).to eq 1
+      game.total_generations = 5
+      expect(game.total_generations).to eq 5
+    end
+
+    describe 'run' do
+      it 'returns the total generations it ran' do
+        game.total_generations = 5
+        game.run!
+        expect(game.generation).to eq 5
+      end
+      it 'actually runs the game' do
+        live_cells = game.world.live_cells
+        game.total_generations = 5
+        game.run!
+        expect(game.world.live_cells.count).to eq 5
+      end
+    end
+  end
 
 end
