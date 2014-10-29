@@ -1,3 +1,42 @@
+class Game
+  attr_accessor :world, :generation
+
+  # the seeds is a matrix that indicates which cells
+  # are alive in the board  
+  def initialize(world=World.new, seeds=[])
+    @world = world
+    @seeds = seeds
+
+    @seeds.each do |row|
+      @world.board[row[0]][row[1]].alive = true
+    end
+  end
+
+  def continue!
+    cells_that_live = []
+    cells_that_die  = []
+
+    @world.cells.each do |cell|
+      live_cells = @world.live_cells_around_cell(cell).count
+
+      # Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
+      cells_that_die << cell if cell.alive? and live_cells < 2
+
+      # Any live cell with more than three live neighbours dies, as if by overcrowding.
+      cells_that_die << cell if cell.alive? and live_cells > 3
+
+      # Any live cell with two or three live neighbours lives on to the next generation.
+      cells_that_live << cell if cell.alive? and live_cells == 2 or live_cells == 3
+
+      # Any dead cell with exactly three live neighbours becomes a live cell.
+      cells_that_live << cell if cell.dead? and live_cells == 3
+    end
+
+    cells_that_live.each  { |cell| cell.revive! }
+    cells_that_die.each   { |cell| cell.kill!   }
+  end
+end
+
 class World
   attr_accessor :cols, :rows, :cells, :board
 
@@ -29,21 +68,37 @@ class World
   def live_cells_around_cell(cell)
     live_cells = []
     # Up Left
-    live_cells << @board[cell.y - 1][cell.x - 1] if @board[cell.y - 1][cell.x - 1].alive? and cell.y > 0 and cell.x > 0
+    if cell.y > 0 and cell.x > 0
+      live_cells << @board[cell.y - 1][cell.x - 1] if @board[cell.y - 1][cell.x - 1].alive?
+    end
     # Up
-    live_cells << @board[cell.y - 1][cell.x] if @board[cell.y - 1][cell.x].alive? and cell.y > 0
+    if cell.y > 0
+      live_cells << @board[cell.y - 1][cell.x] if @board[cell.y - 1][cell.x].alive?
+    end
     # Up Right
-    live_cells << @board[cell.y - 1][cell.x + 1] if @board[cell.y - 1][cell.x + 1].alive? and cell.y > 0 and cell.x < (cols - 1)
+    if cell.y > 0 and cell.x < (cols - 1)
+      live_cells << @board[cell.y - 1][cell.x + 1] if @board[cell.y - 1][cell.x + 1].alive?
+    end
     # Left
-    live_cells << @board[cell.y][cell.x - 1] if @board[cell.y][cell.x - 1].alive? and cell.x > 0
+    if cell.x > 0
+      live_cells << @board[cell.y][cell.x - 1] if @board[cell.y][cell.x - 1].alive?
+    end
     # Right
-    live_cells << @board[cell.y][cell.x + 1] if @board[cell.y][cell.x + 1].alive? and cell.x < (cols - 1)
+    if cell.x < (cols - 1)
+      live_cells << @board[cell.y][cell.x + 1] if @board[cell.y][cell.x + 1].alive?
+    end
     # Down Left
-    live_cells << @board[cell.y + 1][cell.x - 1] if @board[cell.y + 1][cell.x - 1].alive? and cell.y < (rows - 1) and cell.x > 0
+    if cell.y < (rows - 1) and cell.x > 0
+      live_cells << @board[cell.y + 1][cell.x - 1] if @board[cell.y + 1][cell.x - 1].alive?
+    end
     # Down
-    live_cells << @board[cell.y + 1][cell.x] if @board[cell.y + 1][cell.x].alive? and cell.y < (rows - 1)
+    if cell.y < (rows - 1)
+      live_cells << @board[cell.y + 1][cell.x] if @board[cell.y + 1][cell.x].alive?
+    end
     # Down Right
-    live_cells << @board[cell.y + 1][cell.x + 1] if @board[cell.y + 1][cell.x + 1].alive? and cell.y < (rows - 1) and cell.x < (rows - 1)
+    if cell.y < (rows - 1) and cell.x < (rows - 1)
+      live_cells << @board[cell.y + 1][cell.x + 1] if @board[cell.y + 1][cell.x + 1].alive?
+    end
 
 
     live_cells
