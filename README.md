@@ -36,11 +36,15 @@ How to run the specs
 First make sure you got `rpsec` or get it via <br>
 `gem install rspec` <br>
 Each `Cell`, `World` and `Game` has its own `spec` file. <br>
+
 To run the tests for `Cell` <br>
-`rspec cell_spec.rb` <br>
+`rspec cell_spec.rb`
+
 To run the tests for `World` <br>
-`rspec world_spec.rb` <br>
+`rspec world_spec.rb`
+
 To run the tests for `Game` <br>
-`rspec game_spec.rb` <br>
+`rspec game_spec.rb`
+
 To run all tests at once <br>
 `rspec *spec*`
