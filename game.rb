@@ -50,6 +50,11 @@ class World
   end
 
   def populate!
+    @board.each do |row|
+      row.each do |cell|
+        cell.alive = [true, false].sample
+      end
+    end
   end
 end
 

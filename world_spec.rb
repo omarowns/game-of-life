@@ -154,10 +154,16 @@ describe World do
   end
 
   describe 'populating the world' do
+    before { world.populate! }
     describe 'randomly' do
-      before { world.populate! }
       it 'does not returns an empty array with live cells' do
-        expect(world.live_cells.count).to_not eq []
+        expect(world.live_cells).to_not eq []
+      end
+
+      describe 'counting live and dead' do
+        it 'should equal to the total cells' do
+          expect(world.live_cells.count + world.dead_cells.count).to eq world.cells.count
+        end
       end
     end
   end
