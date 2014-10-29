@@ -30,3 +30,17 @@ To run, just call
 Not fun, huh?
 Send `true` to the method and it will print each generation
 `g.run! true`
+
+How to run the specs
+--------------------
+First make sure you got `rpsec` or get it via
+`gem install rspec`
+Each `Cell`, `World` and `Game` has its own `spec` file.
+To run the tests for `Cell`
+`rspec cell_spec.rb`
+To run the tests for `World`
+`rspec world_spec.rb`
+To run the tests for `Game`
+`rspec game_spec.rb`
+To run all tests at once
+`rspec *spec*`
